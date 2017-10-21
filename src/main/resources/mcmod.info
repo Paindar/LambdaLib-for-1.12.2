@@ -1,0 +1,14 @@
+[
+{
+  "modid": "lambda_lib",
+  "name": "LambdaLib",
+  "description": "A library that aims at making modding fluent and enjoyable.",
+  "version": "${version}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Lambda Innovation"],
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
