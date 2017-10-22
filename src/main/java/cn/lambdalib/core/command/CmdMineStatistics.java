@@ -13,8 +13,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import cn.lambdalib.annoreg.core.LoadStage;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegCallback;
+import cn.lambdalib.core.LambdaLib;
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandException;
+import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -23,14 +28,24 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import cn.lambdalib.template.command.LICommandBase;
 
 /**
- * @author WeathFolD
+ * @author WeAthFolD
  *
  */
+@Registrant
 public class CmdMineStatistics extends LICommandBase {
+
+    @RegCallback(stage= LoadStage.START_SERVER)
+    public static void init(FMLServerStartingEvent event){
+        CommandHandler cm = (CommandHandler) event.getServer().getCommandManager();
+        if (LambdaLib.DEBUG) {
+            cm.registerCommand(new CmdMineStatistics());
+        }
+    }
 
     public CmdMineStatistics() {}
 
@@ -41,9 +56,6 @@ public class CmdMineStatistics extends LICommandBase {
     public String getName() {
         return "minestat";
     }
-
-
-
 
     @Override
     public String getUsage(ICommandSender var1) {

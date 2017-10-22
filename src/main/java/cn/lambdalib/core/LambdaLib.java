@@ -6,10 +6,11 @@
 */
 package cn.lambdalib.core;
 
+import cn.lambdalib.annoreg.core.LoadStage;
 import cn.lambdalib.annoreg.core.RegistrationManager;
 import cn.lambdalib.annoreg.core.RegistrationMod;
+import cn.lambdalib.annoreg.mc.RegisterCallbackManager;
 import cn.lambdalib.core.command.CmdMineStatistics;
-import cn.lambdalib.core.command.CmdTestFunction;
 import cn.lambdalib.multiblock.MsgBlockMulti;
 import cn.lambdalib.s11n.network.NetworkEvent;
 import cn.lambdalib.s11n.network.NetworkMessage;
@@ -57,6 +58,10 @@ public class LambdaLib {
         config = new Configuration(event.getSuggestedConfigurationFile());
 
         // WrapperInstance causes bug, manual registering now
+        /*
+         * 考虑到这个严格的信道id....还是不要用RegCallback了比较好？
+         * ——Paindar
+         */
         channel.registerMessage(MsgBlockMulti.ReqHandler.class, MsgBlockMulti.Req.class, 0, Side.SERVER);
         channel.registerMessage(MsgBlockMulti.Handler.class, MsgBlockMulti.class, 1, Side.CLIENT);
         channel.registerMessage(NetworkEvent.MessageHandler.class, NetworkEvent.Message.class, 2, Side.CLIENT);
@@ -66,16 +71,19 @@ public class LambdaLib {
         //
 
         RegistrationManager.INSTANCE.registerAll(this, "PreInit");
+        RegisterCallbackManager.INSTANCE.registerAll(LoadStage.PRE_INIT,event);
     }
 
     @EventHandler()
     public void init(FMLInitializationEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "Init");
+        RegisterCallbackManager.INSTANCE.registerAll(LoadStage.INIT,event);
     }
 
     @EventHandler()
     public void postInit(FMLPostInitializationEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "PostInit");
+        RegisterCallbackManager.INSTANCE.registerAll(LoadStage.POST_INIT,event);
     }
 
     @EventHandler
@@ -85,12 +93,9 @@ public class LambdaLib {
 
     @EventHandler()
     public void serverStarting(FMLServerStartingEvent event) {
-        CommandHandler cm = (CommandHandler) event.getServer().getCommandManager();
-        if (DEBUG) {
-            cm.registerCommand(new CmdMineStatistics());
-            cm.registerCommand(new CmdTestFunction());
-        }
+
         RegistrationManager.INSTANCE.registerAll(this, "StartServer");
+        RegisterCallbackManager.INSTANCE.registerAll(LoadStage.START_SERVER,event);
     }
 
 }
