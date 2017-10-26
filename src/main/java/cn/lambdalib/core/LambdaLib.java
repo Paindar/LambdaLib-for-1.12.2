@@ -25,7 +25,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = "lambda_lib", name = "LambdaLib", version = LambdaLib.VERSION, dependencies = "required-after:"+ LLModContainer.MODID)//
+@Mod(modid = "lambdalib", name = "LambdaLib", version = LambdaLib.VERSION, dependencies = "required-after:"+ LLModContainer.MODID)//
 @RegistrationMod(pkg = "cn.lambdalib.", res = "lambdalib", prefix = "ll_")
 public class LambdaLib {
 

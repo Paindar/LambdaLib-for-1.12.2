@@ -29,7 +29,7 @@ public class ShapelessOreRegistry implements IRecipeRegistry {
         for(int i=0;i<input.length;i++){
             ingredients[i]=Ingredient.fromItem((Item)input[i]);
         }
-        GameRegistry.addShapelessRecipe(new ResourceLocation("lambda_lib:"+name),new ResourceLocation("lambda_lib"),output, ingredients);
+        GameRegistry.addShapelessRecipe(new ResourceLocation("lambdalib:"+name),new ResourceLocation("lambda_lib"),output, ingredients);
     }
 
     private ShapelessOreRegistry() {}
