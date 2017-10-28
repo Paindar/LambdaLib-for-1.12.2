@@ -1,13 +1,21 @@
-package cn.lambdalib.test;
+package cn.lambdalib.util;
 
 import cn.lambdalib.annoreg.core.LoadStage;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegCallback;
 import cn.lambdalib.annoreg.mc.RegChestContent;
+import cn.lambdalib.core.LambdaLib;
+import cn.lambdalib.util.mc.Raytrace;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -46,5 +54,20 @@ public class TestTools extends Item
     @Override
     public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker){
         return true;
+    }
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
+    {
+        RayTraceResult result= Raytrace.traceLiving(playerIn,10);
+        if(result==null)
+            LambdaLib.log.info("trace nothing.");
+        else if(result.typeOfHit== RayTraceResult.Type.BLOCK)
+            LambdaLib.log.info("result block = " + result.getBlockPos());
+        else if(result.typeOfHit== RayTraceResult.Type.ENTITY)
+            LambdaLib.log.info("result entity = " + result.entityHit);
+        else
+            LambdaLib.log.info("result nothing");
+        return new ActionResult<ItemStack>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
     }
 }
