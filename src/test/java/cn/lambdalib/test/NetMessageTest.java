@@ -6,8 +6,9 @@
 */
 package cn.lambdalib.test;
 
+import cn.lambdalib.annoreg.core.LoadStage;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.annoreg.mc.RegCallback;
 import cn.lambdalib.core.LambdaLib;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.INetworkListener;
@@ -17,10 +18,11 @@ import cn.lambdalib.s11n.network.NetworkS11n.NetS11nAdaptor;
 import cn.lambdalib.util.key.KeyHandler;
 import cn.lambdalib.util.key.KeyManager;
 import com.google.common.base.Joiner;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
 // @Registrant
@@ -62,8 +64,8 @@ public class NetMessageTest {
     static final TestEnvironment env = new TestEnvironment();
 
     @SideOnly(Side.CLIENT)
-    @RegInitCallback
-    public static void initClient() {
+    @RegCallback(stage= LoadStage.INIT)
+    public static void initClient(FMLInitializationEvent evt) {
         // Test beta channel
         KeyManager.dynamic.addKeyHandler("TNE1", Keyboard.KEY_H, new KeyHandler() {
             @Override
@@ -84,8 +86,8 @@ public class NetMessageTest {
         });
     }
 
-    @RegInitCallback
-    public static void init() {
+    @RegCallback(stage= LoadStage.INIT)
+    public static void init(FMLInitializationEvent evt) {
         NetworkS11n.addDirect(TestEnvironment.class, new NetS11nAdaptor<TestEnvironment>() {
             @Override
             public void write(ByteBuf buf, TestEnvironment obj) {}

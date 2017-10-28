@@ -6,9 +6,9 @@
 */
 package cn.lambdalib.test;
 
+import cn.lambdalib.annoreg.core.LoadStage;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegCommand;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.annoreg.mc.RegCallback;
 import cn.lambdalib.core.LambdaLib;
 import cn.lambdalib.s11n.network.NetworkEvent;
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
@@ -18,11 +18,14 @@ import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.key.KeyHandler;
 import cn.lambdalib.util.key.KeyHandlerRegistration.RegKeyHandler;
 import cn.lambdalib.util.mc.PlayerUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
 // @Registrant
@@ -65,21 +68,22 @@ public class NetEventTest {
     }
 
     // Server test: via command
-    @RegCommand
+
     public static class TestCommand extends LICommandBase {
 
         @Override
-        public String getCommandName() {
+        public String getName() {
             return "test_net";
         }
 
         @Override
-        public String getCommandUsage(ICommandSender ics) {
+        public String getUsage(ICommandSender ics) {
             return "/test_net: Test network message server->client";
         }
 
         @Override
-        public void processCommand(ICommandSender ics, String[] args) {
+        public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
+        {
             TestMessage msg = newMessage();
             LambdaLib.log.info("Server send " + msg);
             NetworkEvent.sendToAll(msg);
@@ -102,18 +106,18 @@ public class NetEventTest {
     @RegKeyHandler(name = "testNetMsg", keyID = Keyboard.KEY_HOME)
     public static TestKey test;
 
-    @RegInitCallback
-    public static void init() {
+    @RegCallback(stage= LoadStage.INIT)
+    public static void init(FMLInitializationEvent evt) {
         NetworkEvent.listen(TestMessage.class, Side.SERVER, (msg, ctx) -> {
-            PlayerUtils.sendChat(ctx.getServerHandler().playerEntity, "Server received: " + msg);
+            PlayerUtils.sendChat(ctx.getServerHandler().player, "Server received: " + msg);
         });
     }
 
     @SideOnly(Side.CLIENT)
-    @RegInitCallback
-    public static void initClient() {
+    @RegCallback(stage= LoadStage.INIT)
+    public static void initClient(FMLInitializationEvent evt) {
         NetworkEvent.listen(TestMessage.class, Side.CLIENT, (msg, ctx) -> {
-            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+            EntityPlayer player = Minecraft.getMinecraft().player;
             PlayerUtils.sendChat(player, "Client received: " + msg);
         });
     }

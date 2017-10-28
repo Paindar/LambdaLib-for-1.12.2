@@ -1,13 +1,15 @@
 package cn.lambdalib.test;
 
+import cn.lambdalib.annoreg.core.LoadStage;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.annoreg.mc.RegCallback;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib.util.key.KeyHandler;
 import cn.lambdalib.util.key.KeyManager;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.input.Keyboard;
 
 import static java.lang.System.*;
@@ -28,8 +30,8 @@ public class StaticMessageTest {
         out.println("Message1: " + a);
     }
 
-    @RegInitCallback
-    public static void init() {
+    @RegCallback(stage= LoadStage.INIT)
+    public static void init(FMLInitializationEvent evt) {
         KeyManager.dynamic.addKeyHandler("StaticMessageTest", Keyboard.KEY_I, new KeyHandler() {
             @Override
             public void onKeyDown() {
