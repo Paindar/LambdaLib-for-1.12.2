@@ -8,6 +8,7 @@ package cn.lambdalib.util.helper;
 
 import java.util.Random;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -249,7 +250,10 @@ public class Motion3D {
     
     @Override
     public String toString() {
-        return this.toString()+"pos: "+getPosVec()+"vel: "+ getMotionVec();
+        return MoreObjects.toStringHelper(this)
+                .add("pos: ", getPosVec())
+                .add("vel: ", getMotionVec())
+                .toString();
     }
 
 }
