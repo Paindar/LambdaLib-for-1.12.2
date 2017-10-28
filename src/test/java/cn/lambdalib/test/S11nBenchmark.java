@@ -3,6 +3,7 @@ package cn.lambdalib.test;
 import cn.lambdalib.s11n.SerializeType;
 import cn.lambdalib.s11n.nbt.NBTS11n;
 import cn.lambdalib.s11n.network.NetworkS11n;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -39,7 +40,7 @@ public class S11nBenchmark {
         }
 
         public String toString() {
-            return Objects.toStringHelper(this)
+            return MoreObjects.toStringHelper(this)
                     .add("msg", msg)
                     .add("a", a)
                     .add("b", b)
@@ -73,7 +74,7 @@ public class S11nBenchmark {
         }
 
         public String toString() {
-            return Objects.toStringHelper(this)
+            return MoreObjects.toStringHelper(this)
                     .add("inner", inner)
                     .add("x", x)
                     .add("y", y)
