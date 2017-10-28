@@ -6,12 +6,10 @@
  */
 package cn.lambdalib.util.convert;
 
-import cn.lambdalib.cgui.gui.component.Component;
 import cn.lambdalib.core.LLCommons;
 import cn.lambdalib.s11n.SerializationHelper;
 import cn.lambdalib.util.client.font.Fonts;
 import cn.lambdalib.util.client.font.IFont;
-import com.sun.istack.internal.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.*;

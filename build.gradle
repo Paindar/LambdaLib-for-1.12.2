@@ -44,6 +44,7 @@ minecraft {
 }
 
 dependencies {
+    compile files('jars/LambdaLib-PluginLoader.jar') // Core plugin loader
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
@@ -72,14 +73,16 @@ repositories {
     mavenLocal()
 }
 
-apply plugin: 'idea'  
-apply plugin: 'scala'  
-
 sourceSets.main {
-    java.srcDirs = []
-    scala.srcDirs =  ["src/main/java"]
+    java.srcDirs = ["src/main/java"]
 }
   
+task sourcesJar(type: Jar) {
+    from sourceSets.main.java
+    classifier = 'sources'
+}
+println sourceSets.main.java
+compileJava.options.encoding = "UTF-8"
 
 processResources {
     // this will ensure that this task is redone when the versions change.

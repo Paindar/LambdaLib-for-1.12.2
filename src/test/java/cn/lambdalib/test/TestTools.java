@@ -1,4 +1,4 @@
-package cn.lambdalib.util;
+package cn.lambdalib.test;
 
 import cn.lambdalib.annoreg.core.LoadStage;
 import cn.lambdalib.annoreg.core.Registrant;
